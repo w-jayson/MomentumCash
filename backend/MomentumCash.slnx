@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/MomentumCash.Api/MomentumCash.Api.csproj" />
+    <Project Path="src/MomentumCash.Application/MomentumCash.Application.csproj" />
+    <Project Path="src/MomentumCash.Domain/MomentumCash.Domain.csproj" />
+    <Project Path="src/MomentumCash.Infrastructure/MomentumCash.Infrastructure.csproj" />
+  </Folder>
+</Solution>
