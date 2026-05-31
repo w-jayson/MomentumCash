@@ -52,7 +52,9 @@ public sealed class TransactionService
             dto.Amount,
             dto.Date,
             (TransactionTypeEnum)dto.Type,
-            dto.CategoryId
+            dto.CategoryId,
+            dto.Installments,
+            dto.InstallmentValue
         );
 
         _repository.Add(transaction);
@@ -70,7 +72,9 @@ public sealed class TransactionService
             dto.Amount,
             dto.Date,
             (TransactionTypeEnum)dto.Type,
-            dto.CategoryId
+            dto.CategoryId,
+            dto.Installments,
+            dto.InstallmentValue
         );
 
         _repository.Update(transaction);
@@ -96,7 +100,9 @@ public sealed class TransactionService
             t.Date.Value,
             t.Type == TransactionTypeEnum.Income ? "income" : "expense",
             t.CategoryId,
-            t.Category?.Name
+            t.Category?.Name,
+            t.Installments,
+            t.InstallmentValue
         );
     }
 }

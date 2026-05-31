@@ -50,6 +50,8 @@ const Api = {
         date: transaction.date,
         type: transaction.type,
         categoryId: transaction.categoryId || null,
+        installments: transaction.installments || null,
+        installmentValue: transaction.installmentValue || null,
       },
     });
   },
@@ -63,6 +65,8 @@ const Api = {
         date: transaction.date,
         type: transaction.type,
         categoryId: transaction.categoryId || null,
+        installments: transaction.installments || null,
+        installmentValue: transaction.installmentValue || null,
       },
     });
   },

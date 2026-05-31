@@ -7,5 +7,7 @@ public record TransactionDto(
     DateTime Date,
     string Type,
     Guid? CategoryId,
-    string? CategoryName
+    string? CategoryName,
+    int? Installments = null,
+    decimal? InstallmentValue = null
 );
