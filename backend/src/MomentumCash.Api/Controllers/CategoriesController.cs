@@ -19,9 +19,9 @@ public sealed class CategoriesController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IReadOnlyList<CategoryDto>>> GetAll(CancellationToken ct)
+    public async Task<ActionResult<IReadOnlyList<CategoryDto>>> GetAll([FromQuery] int? type, CancellationToken ct)
     {
-        var result = await _service.GetAllAsync(ct);
+        var result = await _service.GetAllAsync(type, ct);
         return Ok(result);
     }
 

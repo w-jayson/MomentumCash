@@ -1,0 +1,16 @@
+/home/wjayson/MomentumCash/backend/src/MomentumCash.Application/bin/Debug/net10.0/MomentumCash.Application.deps.json
+/home/wjayson/MomentumCash/backend/src/MomentumCash.Application/bin/Debug/net10.0/MomentumCash.Application.dll
+/home/wjayson/MomentumCash/backend/src/MomentumCash.Application/bin/Debug/net10.0/MomentumCash.Application.pdb
+/home/wjayson/MomentumCash/backend/src/MomentumCash.Application/bin/Debug/net10.0/MomentumCash.Domain.dll
+/home/wjayson/MomentumCash/backend/src/MomentumCash.Application/bin/Debug/net10.0/MomentumCash.Domain.pdb
+/home/wjayson/MomentumCash/backend/src/MomentumCash.Application/obj/Debug/net10.0/MomentumCash.Application.csproj.AssemblyReference.cache
+/home/wjayson/MomentumCash/backend/src/MomentumCash.Application/obj/Debug/net10.0/MomentumCash.Application.GeneratedMSBuildEditorConfig.editorconfig
+/home/wjayson/MomentumCash/backend/src/MomentumCash.Application/obj/Debug/net10.0/MomentumCash.Application.AssemblyInfoInputs.cache
+/home/wjayson/MomentumCash/backend/src/MomentumCash.Application/obj/Debug/net10.0/MomentumCash.Application.AssemblyInfo.cs
+/home/wjayson/MomentumCash/backend/src/MomentumCash.Application/obj/Debug/net10.0/MomentumCash.Application.csproj.CoreCompileInputs.cache
+/home/wjayson/MomentumCash/backend/src/MomentumCash.Application/obj/Debug/net10.0/MomentumCash.Application.sourcelink.json
+/home/wjayson/MomentumCash/backend/src/MomentumCash.Application/obj/Debug/net10.0/Momentum.07A78716.Up2Date
+/home/wjayson/MomentumCash/backend/src/MomentumCash.Application/obj/Debug/net10.0/MomentumCash.Application.dll
+/home/wjayson/MomentumCash/backend/src/MomentumCash.Application/obj/Debug/net10.0/refint/MomentumCash.Application.dll
+/home/wjayson/MomentumCash/backend/src/MomentumCash.Application/obj/Debug/net10.0/MomentumCash.Application.pdb
+/home/wjayson/MomentumCash/backend/src/MomentumCash.Application/obj/Debug/net10.0/ref/MomentumCash.Application.dll

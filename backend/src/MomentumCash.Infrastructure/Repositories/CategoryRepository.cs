@@ -1,4 +1,5 @@
 using MomentumCash.Domain.Entities;
+using MomentumCash.Domain.Enums;
 using MomentumCash.Domain.Interfaces;
 using MomentumCash.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
@@ -22,6 +23,14 @@ public sealed class CategoryRepository : ICategoryRepository
     public async Task<IReadOnlyList<Category>> GetAllAsync(CancellationToken cancellationToken = default)
     {
         return await _context.Categories
+            .OrderBy(c => c.Name)
+            .ToListAsync(cancellationToken);
+    }
+
+    public async Task<IReadOnlyList<Category>> GetByTypeAsync(TransactionTypeEnum type, CancellationToken cancellationToken = default)
+    {
+        return await _context.Categories
+            .Where(c => c.Type == type)
             .OrderBy(c => c.Name)
             .ToListAsync(cancellationToken);
     }

@@ -32,12 +32,13 @@ const Api = {
     return response.json();
   },
 
-  async fetchCategories() {
-    return this.apiFetch("/categories");
+  async fetchCategories(type) {
+    const query = type ? `?type=${type}` : "";
+    return this.apiFetch(`/categories${query}`);
   },
 
-  async createCategory(name) {
-    return this.apiFetch("/categories", { method: "POST", body: { name } });
+  async createCategory(name, type) {
+    return this.apiFetch("/categories", { method: "POST", body: { name, type } });
   },
 
   async createTransaction(transaction) {
@@ -93,9 +94,9 @@ const Api = {
     });
   },
 
-  async loadCategoriesFromServer() {
+  async loadCategoriesFromServer(type) {
     try {
-      const categories = await this.fetchCategories();
+      const categories = await this.fetchCategories(type);
       Storage.saveCategories(categories);
       return categories;
     } catch {

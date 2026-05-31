@@ -21,27 +21,12 @@ public sealed class TransactionConfiguration : IEntityTypeConfiguration<Transact
             .IsRequired()
             .HasConversion<int>();
 
-        builder.ComplexProperty(t => t.Amount, money =>
-        {
-            money.Property(m => m.Value)
-                .HasColumnName("Amount")
-                .IsRequired()
-                .HasColumnType("decimal(18,2)");
-        });
-
-        builder.ComplexProperty(t => t.Date, date =>
-        {
-            date.Property(d => d.Value)
-                .HasColumnName("Date")
-                .IsRequired();
-        });
-
         builder.HasOne(t => t.Category)
             .WithMany(c => c.Transactions)
             .HasForeignKey(t => t.CategoryId)
             .OnDelete(DeleteBehavior.SetNull);
 
-        builder.HasIndex(t => t.Date);
-        builder.HasIndex(t => t.Type);
+        builder.ComplexProperty(t => t.Amount).IsRequired();
+        builder.ComplexProperty(t => t.Date).IsRequired();
     }
 }

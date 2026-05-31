@@ -1,15 +1,17 @@
 namespace MomentumCash.Domain.ValueObjects;
 
-public sealed record Money
+public sealed class Money
 {
-    public decimal Value { get; }
+    public decimal Value { get; private set; }
 
-    public Money(decimal value)
+    private Money() { Value = 0; }
+
+    public Money(decimal Value)
     {
-        if (value < 0)
-            throw new ArgumentException("Amount cannot be negative.", nameof(value));
+        if (Value < 0)
+            throw new ArgumentException("Amount cannot be negative.", nameof(Value));
 
-        Value = value;
+        this.Value = Value;
     }
 
     public override string ToString() => Value.ToString("F2");

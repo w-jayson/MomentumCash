@@ -1,0 +1,12 @@
+/home/wjayson/MomentumCash/backend/src/MomentumCash.Domain/bin/Debug/net10.0/MomentumCash.Domain.deps.json
+/home/wjayson/MomentumCash/backend/src/MomentumCash.Domain/bin/Debug/net10.0/MomentumCash.Domain.dll
+/home/wjayson/MomentumCash/backend/src/MomentumCash.Domain/bin/Debug/net10.0/MomentumCash.Domain.pdb
+/home/wjayson/MomentumCash/backend/src/MomentumCash.Domain/obj/Debug/net10.0/MomentumCash.Domain.GeneratedMSBuildEditorConfig.editorconfig
+/home/wjayson/MomentumCash/backend/src/MomentumCash.Domain/obj/Debug/net10.0/MomentumCash.Domain.AssemblyInfoInputs.cache
+/home/wjayson/MomentumCash/backend/src/MomentumCash.Domain/obj/Debug/net10.0/MomentumCash.Domain.AssemblyInfo.cs
+/home/wjayson/MomentumCash/backend/src/MomentumCash.Domain/obj/Debug/net10.0/MomentumCash.Domain.csproj.CoreCompileInputs.cache
+/home/wjayson/MomentumCash/backend/src/MomentumCash.Domain/obj/Debug/net10.0/MomentumCash.Domain.sourcelink.json
+/home/wjayson/MomentumCash/backend/src/MomentumCash.Domain/obj/Debug/net10.0/MomentumCash.Domain.dll
+/home/wjayson/MomentumCash/backend/src/MomentumCash.Domain/obj/Debug/net10.0/refint/MomentumCash.Domain.dll
+/home/wjayson/MomentumCash/backend/src/MomentumCash.Domain/obj/Debug/net10.0/MomentumCash.Domain.pdb
+/home/wjayson/MomentumCash/backend/src/MomentumCash.Domain/obj/Debug/net10.0/ref/MomentumCash.Domain.dll

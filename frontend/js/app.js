@@ -54,14 +54,26 @@ const App = {
     return found ? found.name : "-";
   },
 
-  populateCategorySelects() {
+  populateCategorySelects(filterType) {
     const categories = Storage.getCategories();
-    const optionsHtml = '<option value="">Sem categoria</option>' +
-      categories.map((c) => `<option value="${c.id}">${c.name}</option>`).join("");
 
-    this.dom.category.innerHTML = optionsHtml;
+    if (filterType) {
+      const filtered = categories.filter((c) => c.type === filterType);
+      this.dom.category.innerHTML = '<option value="">Sem categoria</option>' +
+        filtered.map((c) => `<option value="${c.id}">${c.name}</option>`).join("");
+    } else {
+      this.dom.category.innerHTML = '<option value="">Sem categoria</option>' +
+        categories.map((c) => `<option value="${c.id}">${c.name}</option>`).join("");
+    }
+
     this.dom.filterCategory.innerHTML = '<option value="">Todas categorias</option>' +
       categories.map((c) => `<option value="${c.id}">${c.name}</option>`).join("");
+  },
+
+  async onTypeChange() {
+    const type = parseInt(this.dom.type.value);
+    this.dom.category.value = "";
+    this.populateCategorySelects(type);
   },
 
   /* ---- Render ---- */
@@ -162,10 +174,13 @@ const App = {
     this.dom.amount.value = t.amount;
     this.dom.type.value = t.type.toString();
     this.dom.date.value = t.date.split("T")[0];
-    this.dom.category.value = t.categoryId || "";
     this.dom.formTitle.textContent = "Editar Transação";
     this.dom.submitBtn.textContent = "Atualizar";
     this.dom.cancelBtn.style.display = "inline-block";
+
+    this.populateCategorySelects(t.type);
+    this.dom.category.value = t.categoryId || "";
+
     this.dom.form.scrollIntoView({ behavior: "smooth" });
   },
 
@@ -304,6 +319,8 @@ const App = {
     this.dom.filterCategory.addEventListener("change", () => this.renderDashboard());
     this.dom.filterType.addEventListener("change", () => this.renderDashboard());
 
+    this.dom.type.addEventListener("change", () => this.onTypeChange());
+
     this.dom.modalConfirm.addEventListener("click", () => this.executeDelete());
     this.dom.modalCancel.addEventListener("click", () => this.closeModal());
     this.dom.modalOverlay.addEventListener("click", (e) => {
@@ -322,7 +339,8 @@ const App = {
     this.bindEvents();
 
     await Api.loadCategoriesFromServer();
-    this.populateCategorySelects();
+    const defaultType = parseInt(this.dom.type.value);
+    this.populateCategorySelects(defaultType);
     this.renderDashboard();
 
     setInterval(() => Api.syncPendingTransactions(), 30000);

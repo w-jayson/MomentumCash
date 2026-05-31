@@ -1,15 +1,17 @@
 namespace MomentumCash.Domain.ValueObjects;
 
-public sealed record TransactionDate
+public sealed class TransactionDate
 {
-    public DateTime Value { get; }
+    public DateTime Value { get; private set; }
 
-    public TransactionDate(DateTime value)
+    private TransactionDate() { Value = DateTime.MinValue; }
+
+    public TransactionDate(DateTime Value)
     {
-        if (value == default)
-            throw new ArgumentException("Transaction date cannot be the default value.", nameof(value));
+        if (Value == default)
+            throw new ArgumentException("Transaction date cannot be the default value.", nameof(Value));
 
-        Value = value;
+        this.Value = Value;
     }
 
     public override string ToString() => Value.ToString("yyyy-MM-dd");
