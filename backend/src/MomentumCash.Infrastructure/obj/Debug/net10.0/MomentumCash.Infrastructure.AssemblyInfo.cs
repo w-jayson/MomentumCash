@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MomentumCash.Infrastructure")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e11c910499bccd8fc93f343948bd21093f3807b4")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8b764bb537cd986977636da239c963e3d869d353")]
 [assembly: System.Reflection.AssemblyProductAttribute("MomentumCash.Infrastructure")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MomentumCash.Infrastructure")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -155,14 +155,6 @@ namespace MomentumCash.Infrastructure.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("character varying(200)");
 
-                    b.Property<decimal?>("InstallmentValue")
-                        .HasColumnType("decimal(18,2)")
-                        .HasColumnName("installment_value");
-
-                    b.Property<int?>("Installments")
-                        .HasColumnType("integer")
-                        .HasColumnName("installments");
-
                     b.Property<int>("Type")
                         .HasColumnType("integer");
 

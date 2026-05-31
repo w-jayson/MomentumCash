@@ -5,7 +5,5 @@ public record UpdateTransactionDto(
     decimal Amount,
     DateTime Date,
     int Type,
-    Guid? CategoryId = null,
-    int? Installments = null,
-    decimal? InstallmentValue = null
+    Guid? CategoryId = null
 );
