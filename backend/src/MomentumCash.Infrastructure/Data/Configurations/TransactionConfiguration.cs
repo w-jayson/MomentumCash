@@ -28,5 +28,14 @@ public sealed class TransactionConfiguration : IEntityTypeConfiguration<Transact
 
         builder.ComplexProperty(t => t.Amount).IsRequired();
         builder.ComplexProperty(t => t.Date).IsRequired();
+
+        builder.Property(t => t.Installments)
+            .HasColumnName("installments")
+            .IsRequired(false);
+
+        builder.Property(t => t.InstallmentValue)
+            .HasColumnName("installment_value")
+            .HasColumnType("decimal(18,2)")
+            .IsRequired(false);
     }
 }

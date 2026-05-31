@@ -5,5 +5,7 @@ public record CreateTransactionDto(
     decimal Amount,
     DateTime Date,
     int Type,
-    Guid? CategoryId = null
+    Guid? CategoryId = null,
+    int? Installments = null,
+    decimal? InstallmentValue = null
 );

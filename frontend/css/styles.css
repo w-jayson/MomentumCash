@@ -320,6 +320,36 @@ body {
   margin-top: 1.25rem;
 }
 
+/* Installment Section */
+.installment-section {
+  display: block;
+}
+
+.form__label--checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  font-weight: 500;
+  color: var(--color-text);
+}
+
+.form__label--checkbox input[type="checkbox"] {
+  width: 1rem;
+  height: 1rem;
+  accent-color: var(--color-primary);
+}
+
+.installment-badge {
+  display: inline-block;
+  font-size: 0.7rem;
+  padding: 0.1rem 0.45rem;
+  border-radius: 999px;
+  margin-left: 0.3rem;
+  background: #e0e7ff;
+  color: var(--color-primary);
+}
+
 /* Footer */
 .footer {
   text-align: center;

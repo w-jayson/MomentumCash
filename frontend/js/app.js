@@ -3,6 +3,7 @@
 const App = {
   editingId: null,
   pendingDeleteId: null,
+  installmentValueEdited: false,
 
   /* ---- DOM References ---- */
   dom: {},
@@ -29,6 +30,11 @@ const App = {
       modalMessage: document.getElementById("modalMessage"),
       modalConfirm: document.getElementById("modalConfirm"),
       modalCancel: document.getElementById("modalCancel"),
+      installmentSection: document.getElementById("installmentSection"),
+      isInstallment: document.getElementById("isInstallment"),
+      installmentFields: document.getElementById("installmentFields"),
+      installments: document.getElementById("installments"),
+      installmentValue: document.getElementById("installmentValue"),
     };
   },
 
@@ -74,6 +80,55 @@ const App = {
     const type = parseInt(this.dom.type.value);
     this.dom.category.value = "";
     this.populateCategorySelects(type);
+    this.toggleInstallmentFields();
+  },
+
+  /* ---- Installment ---- */
+  toggleInstallmentFields() {
+    const type = parseInt(this.dom.type.value);
+    if (type !== 2) {
+      this.dom.installmentSection.style.display = "none";
+      this.dom.isInstallment.checked = false;
+      this.dom.installmentFields.style.display = "none";
+      this.dom.installments.value = "";
+      this.dom.installmentValue.value = "";
+      this.installmentValueEdited = false;
+    } else {
+      this.dom.installmentSection.style.display = "";
+    }
+  },
+
+  autoCalcInstallmentValue(source) {
+    const amount = parseFloat(this.dom.amount.value);
+    const installments = parseInt(this.dom.installments.value);
+
+    if (!this.dom.isInstallment.checked || isNaN(amount) || amount <= 0 || isNaN(installments) || installments < 2)
+      return;
+
+    if (source === "installments" || source === "amount") {
+      const calculated = Math.round((amount / installments) * 100) / 100;
+      this.dom.installmentValue.value = calculated.toFixed(2);
+      this.installmentValueEdited = false;
+    }
+  },
+
+  onInstallmentToggle() {
+    if (this.dom.isInstallment.checked) {
+      this.dom.installmentFields.style.display = "";
+      this.installmentValueEdited = false;
+      this.autoCalcInstallmentValue("installments");
+    } else {
+      this.dom.installmentFields.style.display = "none";
+      this.dom.installments.value = "";
+      this.dom.installmentValue.value = "";
+      this.installmentValueEdited = false;
+      this.dom.installments.classList.remove("error");
+      this.dom.installmentValue.classList.remove("error");
+    }
+  },
+
+  onInstallmentValueInput() {
+    this.installmentValueEdited = true;
   },
 
   /* ---- Render ---- */
@@ -130,10 +185,14 @@ const App = {
           ? '<span class="sync-badge sync-badge--pending">pendente</span>'
           : "";
 
+        const installmentBadge = t.installments
+          ? `<span class="installment-badge">1/${t.installments} parcelas</span>`
+          : "";
+
         return `
           <tr>
             <td>${this.formatDate(t.date)}</td>
-            <td>${this.escapeHtml(t.description)}${syncBadge}</td>
+            <td>${this.escapeHtml(t.description)}${syncBadge}${installmentBadge}</td>
             <td>${this.escapeHtml(this.getCategoryName(t.categoryId))}</td>
             <td class="${amountClass}">${sign} ${this.formatCurrency(t.amount)}</td>
             <td><span class="type-badge ${typeClass}">${typeLabel}</span></td>
@@ -161,6 +220,12 @@ const App = {
     this.dom.submitBtn.textContent = "Salvar";
     this.dom.cancelBtn.style.display = "none";
     this.editingId = null;
+    this.dom.isInstallment.checked = false;
+    this.dom.installmentFields.style.display = "none";
+    this.dom.installments.value = "";
+    this.dom.installmentValue.value = "";
+    this.installmentValueEdited = false;
+    this.toggleInstallmentFields();
   },
 
   showFormForEdit(id) {
@@ -181,6 +246,22 @@ const App = {
     this.populateCategorySelects(t.type);
     this.dom.category.value = t.categoryId || "";
 
+    if (t.installments && t.type === 2) {
+      this.dom.installmentSection.style.display = "";
+      this.dom.isInstallment.checked = true;
+      this.dom.installmentFields.style.display = "";
+      this.dom.installments.value = t.installments;
+      this.dom.installmentValue.value = t.installmentValue ?? "";
+      this.installmentValueEdited = true;
+    } else {
+      this.dom.installmentSection.style.display = "";
+      this.dom.isInstallment.checked = false;
+      this.dom.installmentFields.style.display = "none";
+      this.dom.installments.value = "";
+      this.dom.installmentValue.value = "";
+      this.installmentValueEdited = false;
+    }
+
     this.dom.form.scrollIntoView({ behavior: "smooth" });
   },
 
@@ -198,14 +279,27 @@ const App = {
       return;
     }
 
+    let installments = null;
+    let installmentValue = null;
+
+    if (this.dom.isInstallment.checked) {
+      installments = parseInt(this.dom.installments.value);
+      installmentValue = parseFloat(this.dom.installmentValue.value);
+
+      if (!installments || installments < 2 || !installmentValue || installmentValue <= 0) {
+        this.showFieldErrors();
+        return;
+      }
+    }
+
     if (this.editingId) {
-      this.updateExisting(description, amount, type, date, categoryId);
+      this.updateExisting(description, amount, type, date, categoryId, installments, installmentValue);
     } else {
-      this.createNew(description, amount, type, date, categoryId);
+      this.createNew(description, amount, type, date, categoryId, installments, installmentValue);
     }
   },
 
-  async createNew(description, amount, type, date, categoryId) {
+  async createNew(description, amount, type, date, categoryId, installments, installmentValue) {
     const id = crypto.randomUUID();
     const transaction = {
       id,
@@ -216,6 +310,8 @@ const App = {
       type,
       categoryId,
       syncStatus: "pending",
+      installments,
+      installmentValue,
     };
 
     Storage.addTransaction(transaction);
@@ -231,7 +327,7 @@ const App = {
     }
   },
 
-  async updateExisting(description, amount, type, date, categoryId) {
+  async updateExisting(description, amount, type, date, categoryId, installments, installmentValue) {
     const serverId = this.getServerId(this.editingId);
 
     Storage.updateTransaction(this.editingId, {
@@ -241,6 +337,8 @@ const App = {
       type,
       categoryId,
       syncStatus: "pending",
+      installments,
+      installmentValue,
     });
 
     this.resetForm();
@@ -248,7 +346,7 @@ const App = {
 
     if (serverId) {
       try {
-        const data = { description, amount, type, date, categoryId };
+        const data = { description, amount, type, date, categoryId, installments, installmentValue };
         await Api.updateTransaction(serverId, data);
         Storage.updateTransaction(this.editingId, { syncStatus: "synced" });
         this.renderDashboard();
@@ -272,6 +370,16 @@ const App = {
         el.classList.remove("error");
       }
     });
+
+    if (this.dom.isInstallment.checked) {
+      [this.dom.installments, this.dom.installmentValue].forEach((el) => {
+        if (!el.value || (el.type === "number" && parseFloat(el.value) <= 0)) {
+          el.classList.add("error");
+        } else {
+          el.classList.remove("error");
+        }
+      });
+    }
   },
 
   /* ---- Delete Handling ---- */
@@ -329,6 +437,19 @@ const App = {
 
     [this.dom.description, this.dom.amount].forEach((el) => {
       el.addEventListener("input", () => el.classList.remove("error"));
+    });
+
+    this.dom.isInstallment.addEventListener("change", () => this.onInstallmentToggle());
+    this.dom.installments.addEventListener("input", () => {
+      this.dom.installments.classList.remove("error");
+      this.autoCalcInstallmentValue("installments");
+    });
+    this.dom.amount.addEventListener("input", () => {
+      this.autoCalcInstallmentValue("amount");
+    });
+    this.dom.installmentValue.addEventListener("input", () => {
+      this.dom.installmentValue.classList.remove("error");
+      this.onInstallmentValueInput();
     });
   },
 
