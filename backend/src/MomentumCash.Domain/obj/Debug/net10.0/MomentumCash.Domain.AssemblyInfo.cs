@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MomentumCash.Domain")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e509b88ec9e8bfb84e5ccc20d0502a8077f6445f")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d4e42518fc3ef75b3f7f121c9f1bfdeb09de7d7c")]
 [assembly: System.Reflection.AssemblyProductAttribute("MomentumCash.Domain")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MomentumCash.Domain")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

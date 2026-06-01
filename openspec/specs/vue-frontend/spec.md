@@ -14,19 +14,23 @@ A aplicação SHALL renderizar a landing page como uma árvore de componentes Vu
 
 ### Requirement: Dashboard shows real-time financial summary
 
-O componente `AppHeader` SHALL exibir três cards de resumo: Saldo, Receitas e Despesas. Os valores SHALL ser computados reativamente a partir do array de transações.
+O componente `AppHeader` SHALL exibir tres cards de resumo: Saldo, Receitas e Despesas. Os valores de Receitas e Despesas SHALL ser filtrados pelo mes corrente usando `currentMonthIncome` e `currentMonthExpense`. O Saldo SHALL permanecer como total acumulado historico usando a computed `balance` existente. Os labels de Receitas e Despesas SHALL incluir indicacao "(mes atual)". O label de Saldo SHALL permanecer sem indicador de mes.
 
 #### Scenario: Dashboard updates on transaction create
-- **WHEN** o usuário cria uma nova transação de receita de R$ 1000,00
-- **THEN** o card "Receitas" atualiza para R$ 1000,00 e o card "Saldo" atualiza para R$ 1000,00
+- **WHEN** o usuario cria uma nova transacao de receita de R$ 1000,00 com data do mes atual
+- **THEN** o card "Receitas" (mes atual) atualiza para incluir R$ 1000,00 e o card "Saldo" (total acumulado) atualiza correspondentemente
 
 #### Scenario: Dashboard updates on transaction delete
-- **WHEN** o usuário exclui uma transação de despesa de R$ 500,00
-- **THEN** o card "Despesas" reduz em R$ 500,00 e o card "Saldo" aumenta em R$ 500,00
+- **WHEN** o usuario exclui uma transacao de despesa de R$ 500,00 do mes atual
+- **THEN** o card "Despesas" (mes atual) reduz em R$ 500,00 e o card "Saldo" (total acumulado) aumenta em R$ 500,00
 
-#### Scenario: Empty dashboard shows zero values
-- **WHEN** não há transações registradas
-- **THEN** todos os cards exibem "R$ 0,00"
+#### Scenario: Empty current month shows zero for income/expense
+- **WHEN** nao ha transacoes no mes atual mas ha transacoes em meses anteriores
+- **THEN** os cards "Receitas" e "Despesas" exibem R$ 0,00; o card "Saldo" exibe o total acumulado historico
+
+#### Scenario: Current month filter only affects income and expense cards
+- **WHEN** ha transacoes de meses anteriores mas nenhuma no mes atual
+- **THEN** Receitas e Despesas exibem R$ 0,00; Saldo exibe o valor liquido total de todo o historico
 
 ### Requirement: Monetary counters animate on value change
 
@@ -170,7 +174,7 @@ Ao carregar a página, o sistema SHALL buscar categorias do servidor. Transaçõ
 
 ### Requirement: Visual theme applies Kinetic Dark design system
 
-A interface SHALL aplicar o tema Kinetic Dark: fundo escuro (#060B14) com grid dots overlay, cards com glass morphism (backdrop-blur, bordas translúcidas), tipografia Satoshi para headings e JetBrains Mono para valores monetários, cores accent cyan/emerald/coral, e animações staggered na entrada dos cards.
+A interface SHALL aplicar o tema Kinetic Dark: fundo escuro (#060B14) com grid dots overlay, cards com glass morphism (backdrop-blur, bordas translucidas), tipografia Satoshi para headings e JetBrains Mono para valores monetarios, cores accent cyan/emerald/coral, e animacoes staggered na entrada dos cards. Componentes de grafico (ApexCharts) SHALL seguir o mesmo tema: fundo transparente, tooltips dark, paleta de cores derivada dos tokens do design system.
 
 #### Scenario: Dark background with grid dots visible
 - **WHEN** a página carrega
@@ -183,6 +187,21 @@ A interface SHALL aplicar o tema Kinetic Dark: fundo escuro (#060B14) com grid d
 #### Scenario: Monetary values use monospace font
 - **WHEN** qualquer valor monetário é renderizado
 - **THEN** o texto usa a fonte JetBrains Mono
+
+#### Scenario: Chart components follow dark theme
+- **WHEN** graficos ApexCharts sao renderizados
+- **THEN** o fundo e transparente, textos usam text-primary (#E8EDF5), tooltips usam midnight (#1A233A), e cores de segmentos sao derivadas dos tokens do design system
+
+### Requirement: ApexCharts dependency is declared in package.json
+O projeto SHALL declarar `vue3-apexcharts` e `apexcharts` como dependencias no `package.json`. Nenhum comando de instalacao SHALL ser executado automaticamente — o desenvolvedor SHALL rodar `npm install` manualmente dentro do container Docker.
+
+#### Scenario: Dependencies listed in package.json
+- **WHEN** o `package.json` e inspecionado
+- **THEN** `vue3-apexcharts` e `apexcharts` estao listados em `dependencies` com versoes especificas
+
+#### Scenario: ApexCharts registered as Vue plugin
+- **WHEN** a aplicacao inicializa em `main.js`
+- **THEN** `VueApexCharts` e registrado como componente global via `app.component()`
 
 ### Requirement: Docker development environment with HMR
 

@@ -2,7 +2,7 @@
 import { useTransactions } from '../composables/useTransactions.js'
 import SummaryCard from './SummaryCard.vue'
 
-const { balance, totalIncome, totalExpense } = useTransactions()
+const { balance, currentMonthIncome, currentMonthExpense } = useTransactions()
 </script>
 
 <template>
@@ -18,10 +18,10 @@ const { balance, totalIncome, totalExpense } = useTransactions()
         <SummaryCard label="Saldo" :amount="balance" variant="balance" />
       </div>
       <div style="animation: fadeInUp 0.6s ease-out 0.2s both;">
-        <SummaryCard label="Receitas" :amount="totalIncome" variant="income" />
+        <SummaryCard label="Receitas" :amount="currentMonthIncome" variant="income" sublabel="mês atual" />
       </div>
       <div style="animation: fadeInUp 0.6s ease-out 0.3s both;">
-        <SummaryCard label="Despesas" :amount="totalExpense" variant="expense" />
+        <SummaryCard label="Despesas" :amount="currentMonthExpense" variant="expense" sublabel="mês atual" />
       </div>
     </div>
   </header>

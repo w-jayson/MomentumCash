@@ -70,12 +70,24 @@ export function useTransactions() {
   }
 
   const balance = computed(() => {
+    const now = new Date()
+    const currentYear = now.getFullYear()
+    const currentMonth = now.getMonth()
+
     const income = state.transactions
       .filter((t) => t.type === 1)
       .reduce((sum, t) => sum + t.amount, 0)
     const expense = state.transactions
       .filter((t) => t.type === 2)
-      .reduce((sum, t) => sum + t.amount, 0)
+      .reduce((sum, t) => {
+        if (t.installments && t.installments > 0) {
+          if (isCurrentInstallment(t, currentYear, currentMonth)) {
+            return sum + (t.installmentValue || (t.amount / t.installments))
+          }
+          return sum
+        }
+        return sum + t.amount
+      }, 0)
     return income - expense
   })
 
@@ -89,6 +101,46 @@ export function useTransactions() {
     state.transactions
       .filter((t) => t.type === 2)
       .reduce((sum, t) => sum + t.amount, 0)
+  )
+
+  function isCurrentMonth(dateStr) {
+    if (!dateStr) return false
+    const d = new Date(dateStr)
+    const now = new Date()
+    return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear()
+  }
+
+  function isCurrentInstallment(tx, currentYear, currentMonth) {
+    const start = new Date(tx.date)
+    const startYear = start.getFullYear()
+    const startMonth = start.getMonth()
+
+    const startTotal = startYear * 12 + startMonth
+    const endTotal = startTotal + tx.installments - 1
+    const currentTotal = currentYear * 12 + currentMonth
+
+    return currentTotal >= startTotal && currentTotal <= endTotal
+  }
+
+  const currentMonthIncome = computed(() =>
+    state.transactions
+      .filter((t) => t.type === 1 && isCurrentMonth(t.date))
+      .reduce((sum, t) => sum + t.amount, 0)
+  )
+
+  const currentMonthExpense = computed(() =>
+    state.transactions
+      .filter((t) => t.type === 2)
+      .reduce((sum, t) => {
+        if (t.installments && t.installments > 0) {
+          const now = new Date()
+          if (isCurrentInstallment(t, now.getFullYear(), now.getMonth())) {
+            return sum + (t.installmentValue || (t.amount / t.installments))
+          }
+          return sum
+        }
+        return isCurrentMonth(t.date) ? sum + t.amount : sum
+      }, 0)
   )
 
   function getFilteredTransactions(filters = {}) {
@@ -114,6 +166,8 @@ export function useTransactions() {
     balance,
     totalIncome,
     totalExpense,
+    currentMonthIncome,
+    currentMonthExpense,
     getFilteredTransactions,
   }
 }

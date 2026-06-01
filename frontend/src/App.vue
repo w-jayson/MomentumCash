@@ -1,6 +1,8 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
 import AppHeader from './components/AppHeader.vue'
+import ExpenseChart from './components/ExpenseChart.vue'
+import CommitmentTimeline from './components/CommitmentTimeline.vue'
 import TransactionForm from './components/TransactionForm.vue'
 import TransactionHistory from './components/TransactionHistory.vue'
 import ConfirmModal from './components/ConfirmModal.vue'
@@ -66,24 +68,28 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="max-w-4xl mx-auto px-4 py-6 relative z-10">
+  <div class="max-w-4xl mx-auto px-4 py-6 relative z-10 flex flex-col gap-8">
     <AppHeader />
 
-    <main class="flex flex-col gap-8">
-      <TransactionForm
-        :editing-transaction="editingTransaction"
-        @saved="handleSaved"
-      />
+    <section class="grid grid-cols-1 lg:grid-cols-2 gap-6"
+             style="animation: fadeInUp 0.6s ease-out 0.3s both;">
+      <ExpenseChart />
+      <CommitmentTimeline />
+    </section>
 
-      <TransactionHistory
+    <TransactionForm
+      :editing-transaction="editingTransaction"
+      @saved="handleSaved"
+    />
+
+    <TransactionHistory
         :filter-category="filterCategory"
         :filter-type="filterType"
         @update:filter-category="filterCategory = $event"
         @update:filter-type="filterType = $event"
-        @edit="handleEdit"
-        @delete="handleDelete"
-      />
-    </main>
+      @edit="handleEdit"
+      @delete="handleDelete"
+    />
 
     <AppFooter />
 

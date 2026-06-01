@@ -5,6 +5,7 @@ const props = defineProps({
   label: { type: String, required: true },
   amount: { type: Number, required: true },
   variant: { type: String, default: 'balance', validator: (v) => ['balance', 'income', 'expense'].includes(v) },
+  sublabel: { type: String, default: '' },
 })
 
 const colorMap = {
@@ -21,6 +22,7 @@ const colorMap = {
   >
     <span class="text-xs text-text-secondary uppercase tracking-widest font-medium">
       {{ label }}
+      <span v-if="sublabel" class="normal-case tracking-normal opacity-60 ml-1">({{ sublabel }})</span>
     </span>
     <span
       class="text-2xl font-bold font-mono tabular-nums"
