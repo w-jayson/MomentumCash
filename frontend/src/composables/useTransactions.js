@@ -29,8 +29,20 @@ function persistCategories() {
   localStorage.setItem(STORAGE_KEYS.CATEGORIES, JSON.stringify(state.categories))
 }
 
+let initialized = false
+
+export function updateTransaction(id, data) {
+  const index = state.transactions.findIndex((t) => t.id === id)
+  if (index === -1) return null
+  state.transactions[index] = { ...state.transactions[index], ...data }
+  return state.transactions[index]
+}
+
 export function useTransactions() {
-  loadFromStorage()
+  if (!initialized) {
+    loadFromStorage()
+    initialized = true
+  }
 
   watch(() => [...state.transactions], persistTransactions, { deep: true })
   watch(() => [...state.categories], persistCategories, { deep: true })
@@ -39,15 +51,9 @@ export function useTransactions() {
     state.transactions.push(transaction)
   }
 
-  function updateTransaction(id, data) {
-    const index = state.transactions.findIndex((t) => t.id === id)
-    if (index === -1) return null
-    state.transactions[index] = { ...state.transactions[index], ...data }
-    return state.transactions[index]
-  }
-
   function deleteTransaction(id) {
-    state.transactions = state.transactions.filter((t) => t.id !== id)
+    const index = state.transactions.findIndex((t) => t.id === id)
+    if (index !== -1) state.transactions.splice(index, 1)
   }
 
   function getById(id) {
@@ -111,3 +117,5 @@ export function useTransactions() {
     getFilteredTransactions,
   }
 }
+
+export { state }

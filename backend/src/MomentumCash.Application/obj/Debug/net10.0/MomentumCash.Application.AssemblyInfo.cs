@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MomentumCash.Application")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8503887a0a920baebe2daae78f68b354affbc147")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e509b88ec9e8bfb84e5ccc20d0502a8077f6445f")]
 [assembly: System.Reflection.AssemblyProductAttribute("MomentumCash.Application")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MomentumCash.Application")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

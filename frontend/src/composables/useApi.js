@@ -1,4 +1,4 @@
-import { useTransactions } from './useTransactions.js'
+import { state, updateTransaction, useTransactions } from './useTransactions.js'
 
 const API_BASE = '/api'
 
@@ -75,8 +75,7 @@ async function deleteTransactionApi(id) {
 }
 
 function syncPendingTransactions() {
-  const { transactions, updateTransaction } = useTransactions()
-  const pending = transactions.filter((t) => t.syncStatus === 'pending')
+  const pending = state.transactions.filter((t) => t.syncStatus === 'pending')
 
   pending.forEach(async (t) => {
     try {
