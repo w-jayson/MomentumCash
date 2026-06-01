@@ -8,21 +8,37 @@ import FilterBar from './FilterBar.vue'
 const props = defineProps({
   filterCategory: String,
   filterType: String,
+  filterDateStart: { type: String, default: '' },
+  filterDateEnd: { type: String, default: '' },
 })
 
 const emit = defineEmits([
   'update:filterCategory',
   'update:filterType',
+  'update:filterDateStart',
+  'update:filterDateEnd',
   'edit',
   'delete',
 ])
 
-const { transactions } = useTransactions()
+const { transactions, isDateInRange, isInstallmentInPeriod } = useTransactions()
 const { getCategoryName } = useCategories()
 const { formatCurrency, formatDate, escapeHtml } = useFormat()
 
 const filteredAndSorted = computed(() => {
   let result = [...transactions]
+
+  if (props.filterDateStart && props.filterDateEnd) {
+    const start = new Date(props.filterDateStart + 'T00:00:00')
+    const end = new Date(props.filterDateEnd + 'T23:59:59')
+    result = result.filter((t) => {
+      if (t.installments && t.installments > 0 && t.type === 2) {
+        const r = isInstallmentInPeriod(t, start, end)
+        return r.active
+      }
+      return isDateInRange(t.date, start, end)
+    })
+  }
 
   if (props.filterCategory) {
     result = result.filter((t) => t.categoryId === props.filterCategory)
@@ -48,8 +64,12 @@ const filteredAndSorted = computed(() => {
       <FilterBar
         :filter-category="filterCategory"
         :filter-type="filterType"
+        :filter-date-start="filterDateStart"
+        :filter-date-end="filterDateEnd"
         @update:filter-category="emit('update:filterCategory', $event)"
         @update:filter-type="emit('update:filterType', $event)"
+        @update:filter-date-start="emit('update:filterDateStart', $event)"
+        @update:filter-date-end="emit('update:filterDateEnd', $event)"
       />
     </div>
 

@@ -2,97 +2,14 @@
 import { computed } from 'vue'
 import { useTransactions } from '../composables/useTransactions.js'
 
-const { transactions } = useTransactions()
+const { periodCommitmentProjection } = useTransactions()
 
-const MONTH_LABELS = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez']
+const projectedMonths = computed(() => ({
+  labels: periodCommitmentProjection.value.labels,
+  installmentSeries: periodCommitmentProjection.value.installmentSeries,
+}))
 
-function getMonthKey(year, month) {
-  return `${year}-${String(month + 1).padStart(2, '0')}`
-}
-
-function getMonthLabel(year, month) {
-  return `${MONTH_LABELS[month]}/${String(year).slice(2)}`
-}
-
-const projectedMonths = computed(() => {
-  const now = new Date()
-  const currentMonth = now.getMonth()
-  const currentYear = now.getFullYear()
-
-  const monthTotals = {}
-
-  for (const tx of transactions) {
-    if (!tx.installments || tx.installments <= 0) continue
-    if (tx.type !== 2) continue
-
-    const startDate = new Date(tx.date)
-    const startMonth = startDate.getMonth()
-    const startYear = startDate.getFullYear()
-    const value = tx.installmentValue || (tx.amount / tx.installments)
-    const count = tx.installments
-
-    for (let i = 0; i < count; i++) {
-      const m = startMonth + i
-      const y = startYear + Math.floor(m / 12)
-      const month = m % 12
-      const key = getMonthKey(y, month)
-
-      if (!monthTotals[key]) monthTotals[key] = 0
-      monthTotals[key] += value
-    }
-  }
-
-  const labels = []
-  const installmentSeries = []
-
-  for (let i = 0; i < 12; i++) {
-    const m = currentMonth + i
-    const y = currentYear + Math.floor(m / 12)
-    const month = m % 12
-    const key = getMonthKey(y, month)
-    labels.push(getMonthLabel(y, month))
-    installmentSeries.push(Math.round((monthTotals[key] || 0) * 100) / 100)
-  }
-
-  return { labels, installmentSeries }
-})
-
-const averageIncome = computed(() => {
-  const now = new Date()
-  const currentMonth = now.getMonth()
-  const currentYear = now.getFullYear()
-
-  const monthlyIncome = {}
-
-  for (const tx of transactions) {
-    if (tx.type !== 1) continue
-    const d = new Date(tx.date)
-    const key = getMonthKey(d.getFullYear(), d.getMonth())
-    if (!monthlyIncome[key]) monthlyIncome[key] = 0
-    monthlyIncome[key] += tx.amount
-  }
-
-  const lastMonths = []
-  for (let i = 2; i >= 0; i--) {
-    const m = currentMonth - i
-    const y = currentYear + Math.floor(m / 12)
-    const month = ((m % 12) + 12) % 12
-    const key = getMonthKey(y, month)
-    lastMonths.push(monthlyIncome[key] || 0)
-  }
-
-  const nonZero = lastMonths.filter((v) => v > 0)
-  if (nonZero.length > 0) {
-    return Math.round((nonZero.reduce((a, b) => a + b, 0) / nonZero.length) * 100) / 100
-  }
-
-  const allValues = Object.values(monthlyIncome).filter((v) => v > 0)
-  if (allValues.length > 0) {
-    return Math.round((allValues.reduce((a, b) => a + b, 0) / allValues.length) * 100) / 100
-  }
-
-  return 0
-})
+const averageIncome = computed(() => periodCommitmentProjection.value.averageIncome)
 
 const hasData = computed(() => {
   return projectedMonths.value.installmentSeries.some((v) => v > 0)
@@ -167,7 +84,7 @@ const chartOptions = computed(() => ({
 
 const chartSeries = computed(() => [
   { name: 'Parcelas Projetadas', data: projectedMonths.value.installmentSeries },
-  { name: 'Renda Média Mensal', data: projectedMonths.value.labels.map(() => averageIncome.value) },
+  { name: 'Renda Media Mensal', data: projectedMonths.value.labels.map(() => averageIncome.value) },
 ])
 </script>
 

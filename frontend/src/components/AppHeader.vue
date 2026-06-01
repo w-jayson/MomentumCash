@@ -1,8 +1,11 @@
 <script setup>
+import { computed } from 'vue'
 import { useTransactions } from '../composables/useTransactions.js'
 import SummaryCard from './SummaryCard.vue'
 
-const { balance, currentMonthIncome, currentMonthExpense } = useTransactions()
+const { periodBalance, periodIncome, periodExpense, getPeriodLabel } = useTransactions()
+
+const periodLabel = computed(() => getPeriodLabel())
 </script>
 
 <template>
@@ -15,13 +18,13 @@ const { balance, currentMonthIncome, currentMonthExpense } = useTransactions()
     </h1>
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
       <div style="animation: fadeInUp 0.6s ease-out 0.1s both;">
-        <SummaryCard label="Saldo" :amount="balance" variant="balance" />
+        <SummaryCard label="Saldo" :amount="periodBalance" variant="balance" :sublabel="periodLabel" />
       </div>
       <div style="animation: fadeInUp 0.6s ease-out 0.2s both;">
-        <SummaryCard label="Receitas" :amount="currentMonthIncome" variant="income" sublabel="mês atual" />
+        <SummaryCard label="Receitas" :amount="periodIncome" variant="income" :sublabel="periodLabel" />
       </div>
       <div style="animation: fadeInUp 0.6s ease-out 0.3s both;">
-        <SummaryCard label="Despesas" :amount="currentMonthExpense" variant="expense" sublabel="mês atual" />
+        <SummaryCard label="Despesas" :amount="periodExpense" variant="expense" :sublabel="periodLabel" />
       </div>
     </div>
   </header>

@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
 import AppHeader from './components/AppHeader.vue'
+import PeriodSelector from './components/PeriodSelector.vue'
 import ExpenseChart from './components/ExpenseChart.vue'
 import CommitmentTimeline from './components/CommitmentTimeline.vue'
 import TransactionForm from './components/TransactionForm.vue'
@@ -21,6 +22,8 @@ const pendingDeleteId = ref(null)
 
 const filterCategory = ref('')
 const filterType = ref('')
+const filterDateStart = ref('')
+const filterDateEnd = ref('')
 
 let syncInterval = null
 
@@ -71,6 +74,8 @@ onUnmounted(() => {
   <div class="max-w-4xl mx-auto px-4 py-6 relative z-10 flex flex-col gap-8">
     <AppHeader />
 
+    <PeriodSelector />
+
     <section class="grid grid-cols-1 lg:grid-cols-2 gap-6"
              style="animation: fadeInUp 0.6s ease-out 0.3s both;">
       <ExpenseChart />
@@ -85,8 +90,12 @@ onUnmounted(() => {
     <TransactionHistory
         :filter-category="filterCategory"
         :filter-type="filterType"
+        :filter-date-start="filterDateStart"
+        :filter-date-end="filterDateEnd"
         @update:filter-category="filterCategory = $event"
         @update:filter-type="filterType = $event"
+        @update:filter-date-start="filterDateStart = $event"
+        @update:filter-date-end="filterDateEnd = $event"
       @edit="handleEdit"
       @delete="handleDelete"
     />
