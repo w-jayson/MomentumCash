@@ -133,3 +133,6 @@
 .stagger-3 { animation-delay: 0.3s; }
 .stagger-4 { animation-delay: 0.4s; }
 .stagger-5 { animation-delay: 0.5s; }
+
+.view-enter-active { animation: fadeInUp 0.4s ease-out; }
+.view-leave-active { animation: fadeInUp 0.3s ease-in reverse; }

@@ -1,4 +1,4 @@
-## ADDED Requirements
+## MODIFIED Requirements
 
 ### Requirement: Period selector renders preset options and custom date range
 O componente `PeriodSelector` SHALL renderizar um controle de selecao de periodo na view de extrato completo, posicionado acima do `TransactionHistory`. O PeriodSelector NAO SHALL ser renderizado na view dashboard overview. O controle SHALL exibir o periodo atualmente selecionado e, ao ser clicado, expandir um menu com opcoes pre-definidas e a opcao de intervalo customizado.
